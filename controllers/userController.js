@@ -4,7 +4,7 @@ path = require('path');
 let User = require('../models/user');
 
 module.exports = {
-  savedata: function(req, res) {
+  saveData: function(req, res) {
     let result={
       success: false,
       status: 'ERROR',
@@ -38,5 +38,31 @@ module.exports = {
       })
     });
   },
+  loadData: function(req,res){
+    let result={
+      success: false,
+      status: 'ERROR',
+      msg: 'SOMETHING WHEN WRONG!!!'
+    }
+    User.findOne({username: req.body.username}, function(err, userFind){
+      if(err){
+        result.msg='Cant load data '+req.body.username
+        res.json(result)
+      }else{
+        result.success= true
+        result.status='OK'
+        result.msg= 'load data success'
+        result.user=userFind
+        res.json(result)
+      }
+    })
+  },
+  updateData: function(req,res){
+    let result={
+      success: false,
+      status: 'ERROR',
+      msg: 'SOMETHING WHEN WRONG!!!'
+    }
+  }
 
 }
