@@ -4,19 +4,27 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var swagger = require('swagger-express')
+var jwt = require('jsonwebtoken');
+var crypto = require('crypto')
+
+
 var index = require('./routes/index')
 var users = require('./routes/users')
 var databaseConfig = require('./config/database')
 var cors = require('cors')
 
 require('dotenv').config()
-var mongoose  = require('mongoose')
+var mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-mongoose.connect(databaseConfig.dbUrl, {useMongoClient: true});
+mongoose.connect(databaseConfig.dbUrl, {
+  useMongoClient: true
+});
 
 var app = express();
+var router = express.Router()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,18 +34,56 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //use cors
 app.use(cors())
 
-app.set('superSecret',process.env.SECRET_KEY)
+app.set('superSecret', process.env.SECRET_KEY)
+app.set('algorithm', process.env.ALGORITHM)
+app.set('password', process.env.PASSWORD)
 
+//verif token
+router.use(function(req, res, next) {
 
+  var head = req.headers.authorization ? req.headers.authorization.split(' ') : ''
+  var token = null
+
+  if (head.length == 2) {
+    var scheme = head[0]
+    if (/^Bearer$/i.test(scheme)) {
+      token = head[1]
+
+      function decrypt(text) {
+        var decipher = crypto.createDecipher(app.get('algorithm'), app.get('password'))
+        var dec = decipher.update(text, 'hex', 'utf8')
+        dec += decipher.final('utf8');
+        return dec
+      }
+      if (decrypt(token) == app.get('superSecret')) {
+        next()
+      } else {
+        res.json({
+          success: false,
+          message: 'Failed to authenticate token.'
+        })
+      }
+    }
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    })
+  }
+})
+
+app.use('/api', router);
 app.use('/', index);
-app.use('/user', users);
+app.use('/api/user', users);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

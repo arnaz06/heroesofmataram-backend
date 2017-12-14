@@ -9,6 +9,9 @@ pids
 *.pid
 *.seed
 
+#swagger doc
+heroesofmataram-doc
+
 #directory save data json
 dataUser
 

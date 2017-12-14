@@ -16,20 +16,27 @@ module.exports = {
       if (err) {
         return console.log(err);
       }
-      let result = JSON.parse(data)
-      let user = new User(result)
-      user.save(function(err){
-        if(err){
-          console.log(err);
-          result.msg= 'Error when create new user'
+      let dataJson = JSON.parse(data)
+      User.findOne({username: dataJson.username}, function(err, userFind){
+        if(userFind != null){
+          result.msg='user already exists!!'
+          res.json(result)
         }else{
-          result.success= true
-          result.status= 'OK'
-          result.msg='user saved'
+          let userSave = new User(dataJson)
+          userSave.save(function(err){
+            if(err){
+              console.log(err);
+              result.msg= 'Error when create new user'
+            }else{
+              result.success= true
+              result.status= 'OK'
+              result.msg='user saved'
+            }
+            res.json(result)
+          })
         }
-        res.json(result)
       })
     });
+  },
 
-  }
 }
