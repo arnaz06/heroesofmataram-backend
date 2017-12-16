@@ -16,7 +16,8 @@ router.get('/', function(req, res, next) {
 });
 // router.get('/savedata', userController.savedata)
 let upload = multer({ storage: storage });
-router.post('/savedata', upload.any(), userController.saveData);
+router.post('/savedata', upload.any(), userController.saveData)
 router.post('/loaddata',userController.loadData)
+router.post('/updatedata', upload.any(), userController.updateData)
 
 module.exports = router;

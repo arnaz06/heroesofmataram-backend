@@ -14,15 +14,17 @@ module.exports = {
     filePath = path.join(__dirname,'../'+file[0].path);
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
-        return console.log(err);
+        console.log(err);
+        result.msg= err
+        res.json(result)
       }
-      let dataJson = JSON.parse(data)
-      User.findOne({username: dataJson.username}, function(err, userFind){
+      let dataJSON = JSON.parse(data)
+      User.findOne({username: dataJSON.username}, function(err, userFind){
         if(userFind != null){
           result.msg='user already exists!!'
           res.json(result)
         }else{
-          let userSave = new User(dataJson)
+          let userSave = new User(dataJSON)
           userSave.save(function(err){
             if(err){
               console.log(err);
@@ -63,6 +65,35 @@ module.exports = {
       status: 'ERROR',
       msg: 'SOMETHING WHEN WRONG!!!'
     }
+    let file = req.files
+    filePath = path.join(__dirname,'../'+file[0].path);
+    fs.readFile(filePath, 'utf8', function(err, data) {
+      if(err){
+        console.log('disini',err);
+        result.msg= err
+        res.json(result)
+      }
+      let dataJSON = JSON.parse(data)
+      console.log(dataJSON);
+      User.findOne({username: dataJSON.username}, function(err,userFind){
+        if(err){
+          result.msg=err
+          res.json(result)
+        }
+        else if(JSON.stringify(dataJSON)===JSON.stringify(userFind)){
+          result.msg="there not data are updated"
+          res.json(result)
+        }else{
+          User.update({username: req.body.username},dataJSON,function(err,affected,resp){
+            console.log(affected);
+            result.success= true
+            result.status="OK"
+            result.msg='data updated'
+            res.json(result)
+          })
+        }
+      })
+    })
   }
 
 }
