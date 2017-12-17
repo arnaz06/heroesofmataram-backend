@@ -5,34 +5,36 @@ let User = require('../models/user');
 
 module.exports = {
   saveData: function(req, res) {
-    let result={
+    let result = {
       success: false,
       status: 'ERROR',
       msg: 'SOMETHING WHEN WRONG!!!'
     }
     let file = req.files
-    filePath = path.join(__dirname,'../'+file[0].path);
+    filePath = path.join(__dirname, '../' + file[0].path);
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         console.log(err);
-        result.msg= err
+        result.msg = err
         res.json(result)
       }
       let dataJSON = JSON.parse(data)
-      User.findOne({username: dataJSON.username}, function(err, userFind){
-        if(userFind != null){
-          result.msg='user already exists!!'
+      User.findOne({
+        username: dataJSON.username
+      }, function(err, userFind) {
+        if (userFind != null) {
+          result.msg = 'user already exists!!'
           res.json(result)
-        }else{
+        } else {
           let userSave = new User(dataJSON)
-          userSave.save(function(err){
-            if(err){
+          userSave.save(function(err) {
+            if (err) {
               console.log(err);
-              result.msg= 'Error when create new user'
-            }else{
-              result.success= true
-              result.status= 'OK'
-              result.msg='user saved'
+              result.msg = 'Error when create new user'
+            } else {
+              result.success = true
+              result.status = 'OK'
+              result.msg = 'user saved'
             }
             res.json(result)
           })
@@ -40,59 +42,94 @@ module.exports = {
       })
     });
   },
-  loadData: function(req,res){
-    let result={
+  loadData: function(req, res) {
+    let result = {
       success: false,
       status: 'ERROR',
       msg: 'SOMETHING WHEN WRONG!!!'
     }
-    User.findOne({username: req.body.username}, function(err, userFind){
-      if(err){
-        result.msg='Cant load data '+req.body.username
+    User.findOne({
+      username: req.body.username
+    }, function(err, userFind) {
+      if (err) {
+        result.msg = 'Cant load data ' + req.body.username
         res.json(result)
-      }else{
-        result.success= true
-        result.status='OK'
-        result.msg= 'load data success'
-        result.user=userFind
+      } else {
+        result.success = true
+        result.status = 'OK'
+        result.msg = 'load data success'
+        result.user = userFind
         res.json(result)
       }
     })
   },
-  updateData: function(req,res){
-    let result={
+  updateData: function(req, res) {
+    let result = {
       success: false,
       status: 'ERROR',
       msg: 'SOMETHING WHEN WRONG!!!'
     }
     let file = req.files
-    filePath = path.join(__dirname,'../'+file[0].path);
+    filePath = path.join(__dirname, '../' + file[0].path);
     fs.readFile(filePath, 'utf8', function(err, data) {
-      if(err){
-        console.log('disini',err);
-        result.msg= err
+      if (err) {
+        console.log('disini', err);
+        result.msg = err
         res.json(result)
       }
       let dataJSON = JSON.parse(data)
       console.log(dataJSON);
-      User.findOne({username: dataJSON.username}, function(err,userFind){
-        if(err){
-          result.msg=err
+      User.findOne({
+        username: dataJSON.username
+      }, function(err, userFind) {
+        if (err) {
+          result.msg = err
           res.json(result)
-        }
-        else if(JSON.stringify(dataJSON)===JSON.stringify(userFind)){
-          result.msg="there not data are updated"
+        } else if (JSON.stringify(dataJSON) === JSON.stringify(userFind)) {
+          result.msg = "there not data are updated"
           res.json(result)
-        }else{
-          User.update({username: req.body.username},dataJSON,function(err,affected,resp){
+        } else {
+          User.update({
+            username: dataJSON.username
+          }, dataJSON, function(err, affected, resp) {
             console.log(affected);
-            result.success= true
-            result.status="OK"
-            result.msg='data updated'
+            result.success = true
+            result.status = "OK"
+            result.msg = 'data updated'
             res.json(result)
           })
         }
       })
+    })
+  },
+  delete: function(req, res) {
+    let result = {
+      success: false,
+      status: 'ERROR',
+      msg: 'SOMETHING WHEN WRONG!!!'
+    }
+    User.findOne({
+      Username: req.body.username
+    }, function(err, userFind) {
+      if (err) {
+        result.msg = err
+        res.json(result)
+      } else if (userFind == null) {
+        result.msg = 'user not found'
+        res.json(result)
+      } else {
+        User.remove(userFind, function(err) {
+          if (err) {
+            result.msg = 'delete failed'
+            res.json(result)
+          } else {
+            result.success = true
+            result.status = 'OK'
+            result.msg = 'delete success'
+            res.json(result)
+          }
+        })
+      }
     })
   }
 
