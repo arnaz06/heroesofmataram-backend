@@ -8,7 +8,7 @@ module.exports = {
     let result = {
       success: false,
       status: 'ERROR',
-      msg: 'SOMETHING WHEN WRONG!!!'
+      msg: 'SOMETHING WENT WRONG!!!'
     }
     let file = req.files
     filePath = path.join(__dirname, '../' + file[0].path);
@@ -46,7 +46,7 @@ module.exports = {
     let result = {
       success: false,
       status: 'ERROR',
-      msg: 'SOMETHING WHEN WRONG!!!'
+      msg: 'SOMETHING WENT WRONG!!!'
     }
     User.findOne({
       username: req.body.username
@@ -67,7 +67,7 @@ module.exports = {
     let result = {
       success: false,
       status: 'ERROR',
-      msg: 'SOMETHING WHEN WRONG!!!'
+      msg: 'SOMETHING WENT WRONG!!!'
     }
     let file = req.files
     filePath = path.join(__dirname, '../' + file[0].path);
