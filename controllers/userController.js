@@ -49,12 +49,15 @@ module.exports = {
       msg: 'SOMETHING WENT WRONG!!!'
     }
     User.findOne({
-      username: req.body.username
+      Username: req.body.username
     }, function(err, userFind) {
       if (err) {
         result.msg = 'Cant load data ' + req.body.username
         res.json(result)
-      } else {
+      } else if(userFind== null){
+        result.msg= 'User not found'
+        res.json(result)
+      }else {
         result.success = true
         result.status = 'OK'
         result.msg = 'load data success'
@@ -97,7 +100,7 @@ module.exports = {
             res.json(result)
           } else {
             User.update({
-              username: dataJSON.username
+              Username: dataJSON.username
             }, dataJSON, function(err, affected, resp) {
               console.log(affected);
               result.success = true
