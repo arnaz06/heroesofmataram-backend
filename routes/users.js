@@ -227,11 +227,13 @@ router.post('/loaddata',userController.loadData)
   *     }
   * @apiParamExample {json} Request-Example:
   *  {
-  *      "file": username-updatedata.txt
+  *      "file": username-updatedata.txt,
+         "username": Kevin123
   *  }
   * @apiSuccess {Boolean} success true jika berhasil
   * @apiSuccess {string} status "OK" jika berhasil
   * @apiSuccess {file} file file user berupa JSON
+  * @apiSuccess {string} username Kevin123 username
   * @apiSuccessExample {json} success
   *     HTTP/1.1 200 OK
   {

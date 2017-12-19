@@ -78,26 +78,34 @@ module.exports = {
         res.json(result)
       }
       let dataJSON = JSON.parse(data)
-      console.log(dataJSON);
+      console.log(req.body.username);
       User.findOne({
-        username: dataJSON.username
+        Username: req.body.username
       }, function(err, userFind) {
         if (err) {
           result.msg = err
           res.json(result)
-        } else if (JSON.stringify(dataJSON) === JSON.stringify(userFind)) {
-          result.msg = "there not data are updated"
-          res.json(result)
         } else {
-          User.update({
-            username: dataJSON.username
-          }, dataJSON, function(err, affected, resp) {
-            console.log(affected);
-            result.success = true
-            result.status = "OK"
-            result.msg = 'data updated'
+          if (userFind == null) {
+            result.msg = 'user not found'
             res.json(result)
-          })
+          } else if (dataJSON.Username != userFind.Username) {
+            result.msg = 'cant change username '
+            res.json(result)
+          } else if (JSON.stringify(dataJSON) === JSON.stringify(userFind)) {
+            result.msg = "there not data are updated"
+            res.json(result)
+          } else {
+            User.update({
+              username: dataJSON.username
+            }, dataJSON, function(err, affected, resp) {
+              console.log(affected);
+              result.success = true
+              result.status = "OK"
+              result.msg = 'data updated'
+              res.json(result)
+            })
+          }
         }
       })
     })
