@@ -7,4 +7,4 @@ let userSchema = new Schema({}, {
   timestamps: true
 })
 userSchema.plugin(mongoose_delete, { deletedAt : true })
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema,'users')
