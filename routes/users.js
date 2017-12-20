@@ -63,7 +63,7 @@ router.post('/savedata', upload.any(), userController.saveData)
   *  }
   * @apiSuccess {Boolean} success true jika berhasil
   * @apiSuccess {string} status "OK" jika berhasil
-  * @apiSuccess {file} file file user beruba JSON
+  * @apiSuccess {string} username string username 
   * @apiSuccessExample {json} success
   *     HTTP/1.1 200 OK
   {
