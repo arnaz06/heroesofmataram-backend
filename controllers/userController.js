@@ -115,39 +115,6 @@ module.exports = {
           result.msg = 'user updated'
           res.json(result)
         }
-
-        // else if(_userFind == null){
-        //   result.msg = 'user not found'
-        //   res.json(result)
-        // } else {
-        //   let userFind = _userFind.toJSON()
-        //   if (dataJSON.user_Name != userFind.user_Name) {
-        //     result.msg = 'cant change username'
-        //     res.json(result)
-        //   } else if (JSON.stringify(dataJSON) === JSON.stringify(userFind)) {
-        //     result.msg = "there not data are updated"
-        //     res.json(result)
-        //   } else {
-        //     let temp = {}
-        //     userFind = dataJSON
-        //     console.log(userFind.Device_ID);
-            // User.save()
-
-            // console.log(dataJSON.Device_ID);
-            // console.log(userFind.Device_ID);
-            // let delta = jsondiffpatch.diff(_userFind, dataJSON);
-            // console.log(delta);
-            // User.update({
-            //   Username: dataJSON.user_Name
-            // }, dataJSON, function(err, affected, resp) {
-            //   result.success = true
-            //   result.status = "OK"
-            //   result.msg = delta
-            //   result.msg2 = resp
-            //   res.json(result)
-            // })
-        //   }
-        // }
       })
     })
   },
