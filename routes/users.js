@@ -27,12 +27,10 @@ router.get('/', function(req, res, next) {
   * @apiParamExample {json} Request-Example:
   *  {
   *      "file": username-updatedata.txt,
-         "username": username-updatedata.txt
   *  }
   * @apiSuccess {Boolean} success true jika berhasil
   * @apiSuccess {string} status "OK" jika berhasil
   * @apiSuccess {file} file file user berupa JSON
-  * @apiSuccess {file} username string username
   * @apiSuccessExample {json} success
   *     HTTP/1.1 200 OK
   {
@@ -63,7 +61,7 @@ router.post('/savedata', upload.any(), userController.saveData)
   *  }
   * @apiSuccess {Boolean} success true jika berhasil
   * @apiSuccess {string} status "OK" jika berhasil
-  * @apiSuccess {string} username string username 
+  * @apiSuccess {string} username string username
   * @apiSuccessExample {json} success
   *     HTTP/1.1 200 OK
   {
