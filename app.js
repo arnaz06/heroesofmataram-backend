@@ -82,9 +82,9 @@ router.use(function(req, res, next) {
   }
 })
 
-app.use('/api', router);
-app.use('/', index);
-app.use('/api/user', users);
+app.use('/', router);
+app.use('/ping', index);
+app.use('/user', users);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
